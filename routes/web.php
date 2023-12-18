@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\TiendaController;
+use App\Http\Controllers\VentaController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,9 +16,14 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+// Route::get('/', function () {
+//     return view('welcome');
+// });
+
+Route::get('/', [TiendaController::class, 'index'])->name('tienda.index');
+Route::get('/carrito', [TiendaController::class, 'carrito'])->name('carrito');
+
+Route::post('/venta', [VentaController::class, 'store'])->name('venta.store');
 
 Route::get('/dashboard', function () {
     return view('dashboard');

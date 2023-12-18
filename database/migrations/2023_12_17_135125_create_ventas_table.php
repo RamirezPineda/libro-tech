@@ -17,8 +17,10 @@ return new class extends Migration
             $table->time('hota')->default(now());
             $table->integer('total');
             $table->bigInteger('id_servicio')->nullable();
+            $table->bigInteger('id_cliente');
 
             $table->foreign('id_servicio')->references('id')->on('servicios')->nullOnDelete('cascade')->onUpdate('cascade');
+            $table->foreign('id_cliente')->references('id')->on('clientes')->onDelete('cascade')->onUpdate('cascade');
 
             $table->timestamps();
         });

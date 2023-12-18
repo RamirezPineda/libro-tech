@@ -14,9 +14,10 @@ return new class extends Migration
         Schema::create('pagos', function (Blueprint $table) {
             $table->id();
             $table->string('detalle');
-            $table->date('fecha');
-            $table->time('hota');
+            $table->date('fecha')->default(now());
+            $table->time('hota')->default(now());
             $table->string('tipo');
+            $table->string('estado')->default('pendiente');
             $table->bigInteger('id_venta');
 
             $table->foreign('id_venta')->references('id')->on('ventas')->onDelete('cascade')->onUpdate('cascade');
