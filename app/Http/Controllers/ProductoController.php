@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Genero;
+use App\Models\Inventario;
 use App\Models\Producto;
+use App\Models\Promocion;
 use Illuminate\Http\Request;
 
 class ProductoController extends Controller
@@ -12,31 +15,36 @@ class ProductoController extends Controller
      */
     public function index()
     {
-        //
+        $productos = Producto::all();
+        $generos = Genero::all();
+        $promociones = Promocion::all();
+
+        return view('productos.index', compact('productos', 'generos', 'promociones'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
 
     /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
     {
-        //
-    }
+        $data = $request->validate([
+            'titulo' => 'required|string|max:255',
+            'autor' => 'required|string|max:100',
+            'descripcion' => 'required|string|max:255',
+            'precio' => 'required|numeric',
+            'stock' => 'required|numeric',
+            'imagen' => 'required|image|mimes:jpeg,png,jpg',
+            'id_genero' => 'required|numeric',
+            'id_promocion' => 'nullable|numeric'
+        ]);
+        $foto_url = cloudinary()->upload($request->file('imagen')->getRealPath())->getSecurePath();
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Producto $producto)
-    {
-        //
+        $data['imagen'] = $foto_url;
+
+        Producto::create($data);
+
+        return redirect()->route('productos.index')->with('success', 'Producto creado correctamente');
     }
 
     /**
@@ -44,7 +52,10 @@ class ProductoController extends Controller
      */
     public function edit(Producto $producto)
     {
-        //
+        $generos = Genero::all();
+        $promociones = Promocion::all();
+
+        return view('productos.edit', compact('producto', 'generos', 'promociones'));
     }
 
     /**
@@ -52,7 +63,41 @@ class ProductoController extends Controller
      */
     public function update(Request $request, Producto $producto)
     {
-        //
+        $data = $request->validate([
+            'titulo' => 'required|string|max:255',
+            'autor' => 'required|string|max:100',
+            'descripcion' => 'required|string|max:255',
+            'precio' => 'required|numeric|min:0',
+            'stock' => 'required|numeric|min:0',
+            'id_genero' => 'required|numeric',
+            'id_promocion' => 'nullable|numeric'
+        ]);
+
+        if ($request->hasFile('imagen')) {
+            $foto_url = cloudinary()->upload($request->file('imagen')->getRealPath())->getSecurePath();
+            $data['imagen'] = $foto_url;
+        }
+
+        $productoActual = Producto::find($producto->id);
+        if ($data['stock'] > $productoActual->stock) {
+            $cantidadAumentada = abs($data['stock'] - $productoActual->stock);
+            try {
+                $inventario = Inventario::where('id_producto', $producto->id)->first();
+                $inventario->cantidad_disponible = $inventario->cantidad_disponible - $cantidadAumentada;
+
+                if ($inventario->cantidad_disponible < 0) {
+                    return redirect()->back()->with('error', 'No hay stock suficiente en el inventario');
+                } 
+
+                $inventario->save();
+            } catch (\Throwable $th) {
+                return redirect()->back()->with('error', 'Ocurrio un error');
+            }
+        }
+
+        $producto->update($data);
+
+        return redirect()->route('productos.index')->with('success', 'Producto actualizado correctamente');
     }
 
     /**
@@ -60,6 +105,8 @@ class ProductoController extends Controller
      */
     public function destroy(Producto $producto)
     {
-        //
+        $producto->delete();
+
+        return redirect()->route('productos.index')->with('success', 'Producto eliminado correctamente');
     }
 }

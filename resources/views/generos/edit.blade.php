@@ -1,0 +1,34 @@
+@extends('adminlte::page')
+
+@section('title', 'Generos')
+
+@section('content_header')
+    <h1>Editar genero</h1>
+@stop
+
+@section('content')
+
+  <form action="{{ route('generos.update', $genero) }}" method="POST">
+    @csrf
+    @method('PUT')
+    <div class="row">
+      <x-adminlte-input name="nombre" label="Nombre" placeholder="placeholder"
+          fgroup-class="col-md-6" disable-feedback  value="{{ old('nombre', $genero->nombre) }}"/>
+    @error('nombre')
+          <small class="text-danger">*{{ $message }}</small>
+          <br><br>
+      @enderror
+  </div>
+  <button type="submit" class="btn btn-primary mb-4">
+    Guardar
+  </button>
+  </form>
+
+@stop
+
+@section('css')
+    <link rel="stylesheet" href="/css/admin_custom.css">
+@stop
+
+@section('js')
+@stop

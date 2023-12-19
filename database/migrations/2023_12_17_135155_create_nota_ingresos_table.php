@@ -19,9 +19,11 @@ return new class extends Migration
             $table->integer('costo');
             $table->bigInteger('id_inventario');
             $table->bigInteger('id_proveedor');
+            $table->bigInteger('id_personal');
 
             $table->foreign('id_inventario')->references('id')->on('inventarios')->onDelete('cascade')->onUpdate('cascade');
             $table->foreign('id_proveedor')->references('id')->on('proveedores')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('id_personal')->references('id')->on('personales')->onDelete('cascade')->onUpdate('cascade');
 
             $table->timestamps();
         });

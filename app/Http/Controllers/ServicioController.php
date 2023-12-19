@@ -12,15 +12,8 @@ class ServicioController extends Controller
      */
     public function index()
     {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
+        $servicios = Servicio::all();
+        return view('servicios.index', compact('servicios'));
     }
 
     /**
@@ -28,15 +21,14 @@ class ServicioController extends Controller
      */
     public function store(Request $request)
     {
-        //
-    }
+        $data  = $request->validate([
+            'nombre' => 'required|string|max:30',
+            'precio' => 'required|numeric'
+        ]);
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Servicio $servicio)
-    {
-        //
+        Servicio::create($data);
+
+        return redirect()->route('servicios.index')->with('success', 'Género creado correctamente');
     }
 
     /**
@@ -44,7 +36,7 @@ class ServicioController extends Controller
      */
     public function edit(Servicio $servicio)
     {
-        //
+        return view('servicios.edit', compact('servicio'));
     }
 
     /**
@@ -52,7 +44,14 @@ class ServicioController extends Controller
      */
     public function update(Request $request, Servicio $servicio)
     {
-        //
+        $data = $request->validate([
+            'nombre' => 'required|string|max:30',
+            'precio' => 'required|numeric'
+        ]);
+
+        $servicio->update($data);
+
+        return redirect()->route('servicios.index')->with('success', 'Servicio creado correctamente');
     }
 
     /**
@@ -60,6 +59,7 @@ class ServicioController extends Controller
      */
     public function destroy(Servicio $servicio)
     {
-        //
+        $servicio->delete();
+        return redirect()->route('servicios.index')->with('success', 'Servicio eliminado correctamente');
     }
 }

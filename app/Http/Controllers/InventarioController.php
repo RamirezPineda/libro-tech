@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Inventario;
+use App\Models\Producto;
 use Illuminate\Http\Request;
 
 class InventarioController extends Controller
@@ -12,31 +13,28 @@ class InventarioController extends Controller
      */
     public function index()
     {
-        //
+        $productos = Producto::all();
+        $inventarios = Inventario::all();
+        $inventarios->load('producto');
+
+        return view('inventarios.index', compact('productos', 'inventarios'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
 
     /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
     {
-        //
-    }
+        $data = $request->validate([
+            'nombre' => 'required|string|max:255',
+            'cantidad_disponible' => 'required|numeric',
+            'id_producto' => 'required',
+        ]);
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Inventario $inventario)
-    {
-        //
+        Inventario::create($data);
+
+        return redirect()->route('inventarios.index')->with('success', 'Inventario creado correctamente');
     }
 
     /**
@@ -44,7 +42,8 @@ class InventarioController extends Controller
      */
     public function edit(Inventario $inventario)
     {
-        //
+        $productos = Producto::all();
+        return view('inventarios.edit', compact('inventario', 'productos'));
     }
 
     /**
@@ -52,7 +51,15 @@ class InventarioController extends Controller
      */
     public function update(Request $request, Inventario $inventario)
     {
-        //
+        $data = $request->validate([
+            'nombre' => 'required|string|max:255',
+            'cantidad_disponible' => 'required|numeric',
+            'id_producto' => 'required',
+        ]);
+
+        $inventario->update($data);
+
+        return redirect()->route('inventarios.index')->with('success', 'Inventario actualizado correctamente');
     }
 
     /**
@@ -60,6 +67,7 @@ class InventarioController extends Controller
      */
     public function destroy(Inventario $inventario)
     {
-        //
+        $inventario->delete();
+        return redirect()->route('inventarios.index')->with('success', 'Inventario eliminado correctamente');
     }
 }

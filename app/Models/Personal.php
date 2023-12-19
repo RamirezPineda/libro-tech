@@ -14,4 +14,9 @@ class Personal extends Model
         'id',
         'profesion'
     ];
+
+    public function usuario()
+    {
+        return $this->belongsTo(Usuario::class, 'id');
+    }
 }

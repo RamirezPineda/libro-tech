@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Cliente;
 use App\Models\DetalleVenta;
 use App\Models\Pago;
 use App\Models\Producto;
+use App\Models\Servicio;
 use App\Models\Venta;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -36,9 +38,20 @@ class VentaController extends Controller
     public function store(Request $request)
     {
         try {
+            $cliente = Cliente::find(Auth::user()->id);
+
+            if (!$cliente) {
+                return redirect()->back()->with('error', 'Usted debe tener una cuenta de tipo cliente');
+            }
+
             DB::beginTransaction();
 
             $cartJson = json_decode($request->input('cart'), true);
+
+            if ($request->id_servicio != 0) {
+                $servicio = Servicio::find($request->id_servicio);
+                $request['total'] = $request->total + $servicio->precio;
+            }
 
             $venta = Venta::create([
                 'total' => $request->total,

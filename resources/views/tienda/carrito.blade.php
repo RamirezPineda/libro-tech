@@ -16,6 +16,12 @@
         @endif
       </header>
 
+      @if(session('error'))
+      <div class="alert alert-danger text-red-500 flex justify-center items-center text-center">
+          {{ session('error') }}
+      </div>
+      @endif
+
       @if (!empty($laQrImage))
           <div class="mt-8">
             <div class="flex justify-center items-center">
@@ -117,6 +123,17 @@
                         <label for="telefono" class="text-gray-600">Telefono</label>
                         <input value="{{ Auth::user()->telefono }}" name="telefono" class="form-input w-full rounded-md" type="number" min="0" minlength="8" placeholder="12345678">
                       </div>
+
+                      <div class="flex flex-col mb-2">
+                        <label for="id_servicio" class="text-gray-600">Servicio Adicional (Bs)</label>
+                        <select name="id_servicio" id="id_servicio" class="form-input w-full rounded-md">
+                          <option selected value="0">Seleccionar Servicio</option>
+                          @foreach ($servicios as $servicio)
+                            <option value="{{ $servicio->id }}">{{ $servicio->nombre }} | Precio: {{ $servicio->precio }}</option>
+                          @endforeach
+                        </select>
+                      </div>
+       
                       <div class="flex flex-col mb-2">
                         <label for="tipoPago" class="text-gray-600">Tipo de pago</label>
                         <select name="tipo_pago" id="tipoPago" class="form-input w-full rounded-md">

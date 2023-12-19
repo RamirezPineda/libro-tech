@@ -15,4 +15,9 @@ class Proveedor extends Model
         'nit',
         'empresa'
     ];
+
+    public function usuario()
+    {
+        return $this->belongsTo(Usuario::class, 'id');
+    }
 }

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Genero;
 use App\Models\Producto;
+use App\Models\Servicio;
 use Illuminate\Http\Request;
 
 class TiendaController extends Controller
@@ -22,7 +23,8 @@ class TiendaController extends Controller
 
     public function carrito() 
     {
-        return view('tienda.carrito');
+        $servicios = Servicio::all();
+        return view('tienda.carrito', compact('servicios'));
     }
 
     /**
