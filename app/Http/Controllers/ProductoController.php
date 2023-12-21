@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Genero;
 use App\Models\Inventario;
+use App\Models\Pagina;
 use App\Models\Producto;
 use App\Models\Promocion;
 use Illuminate\Http\Request;
@@ -15,6 +16,8 @@ class ProductoController extends Controller
      */
     public function index()
     {
+        ConfiguracionController::establecerTema();
+        Pagina::contarPagina(\request()->path());
         $productos = Producto::all();
         $generos = Genero::all();
         $promociones = Promocion::all();
@@ -52,6 +55,8 @@ class ProductoController extends Controller
      */
     public function edit(Producto $producto)
     {
+        ConfiguracionController::establecerTema();
+        Pagina::contarPagina(\request()->path());
         $generos = Genero::all();
         $promociones = Promocion::all();
 

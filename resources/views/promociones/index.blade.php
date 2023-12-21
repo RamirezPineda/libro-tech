@@ -8,6 +8,15 @@
 
 @section('content')
 
+          
+@if(session('success'))
+<div class="alert alert-success">
+    {{ session('success') }}
+</div>
+@endif
+
+@can('promociones.create')
+    
 <!-- Button trigger modal -->
 <button type="button" class="btn btn-primary mb-4" data-toggle="modal" data-target="#exampleModal">
   + Crear
@@ -26,38 +35,39 @@
       <form action="{{ route('promociones.store') }}" method="POST">
         @csrf
         <div class="modal-body">
-            <div class="row">
-              <x-adminlte-input name="nombre" label="Nombre" placeholder="Navidad"
+          <div class="row">
+            <x-adminlte-input name="nombre" label="Nombre" placeholder="Navidad"
                   fgroup-class="col-md-12" disable-feedback/>
-              @error('nombre')
+                  @error('nombre')
                   <small class="text-danger">*{{ $message }}</small>
                   <br><br>
-              @enderror
-              <x-adminlte-input type="number" min=0 name="descuento" label="Descuento" placeholder="15"
-              fgroup-class="col-md-12" disable-feedback/>
-              @error('descuento')
-              <small class="text-danger">*{{ $message }}</small>
-              <br><br>
-              @enderror
-            </div>
-
+                  @enderror
+                  <x-adminlte-input type="number" min=0 name="descuento" label="Descuento" placeholder="15"
+                  fgroup-class="col-md-12" disable-feedback/>
+                  @error('descuento')
+                  <small class="text-danger">*{{ $message }}</small>
+                  <br><br>
+                  @enderror
+                </div>
+                
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                <button type="submit" class="btn btn-primary">Guardar</button>
+              </div>
+            </form>
           </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-            <button type="submit" class="btn btn-primary">Guardar</button>
-          </div>
-      </form>
-    </div>
-  </div>
-</div>
-
-
-
+        </div>
+      </div>
+      
+@endcan
+      
+      
 {{-- Setup data for datatables --}}
 @php
 $heads = [
-    'ID',
-    'Nombre',
+  'ID',
+  'Nombre',
     'Descuento (%)',
     ['label' => 'Acciones', 'no-export' => true, 'width' => 5],
 ];
@@ -88,9 +98,12 @@ $config = [
             @endforeach
             <td>
               <div class="d-flex">
+                @can('promociones.edit')
                   <a href="{{ route('promociones.edit', $promocion[0]) }}" class="btn btn-xs btn-default text-primary mx-1 shadow" title="Edit">
                       <i class="fa fa-lg fa-fw fa-pen"></i>
                   </a>
+                @endcan
+                @can('promociones.destroy')
                   <form action="{{ route('promociones.destroy', $promocion[0]) }}" method="POST">
                       @csrf
                       @method('DELETE')
@@ -98,6 +111,7 @@ $config = [
                           <i class="fa fa-lg fa-fw fa-trash"></i>
                       </button>
                   </form>
+                @endcan
               </div>
           </td>
           

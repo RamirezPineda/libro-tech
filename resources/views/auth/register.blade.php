@@ -1,4 +1,8 @@
 <x-guest-layout>
+    @php
+$pagina = \App\Models\Pagina::where('path', '=', request()->path())->first();
+@endphp
+
     <form method="POST" action="{{ route('register') }}">
         @csrf
 
@@ -71,4 +75,7 @@
             </x-primary-button>
         </div>
     </form>
+    <footer class="mt-10">
+        <h3 class="text-gray-600 dark:text-gray-400 text-xl font-medium">Visitas: {{ $pagina->visitas }}</h3>
+      </footer>
 </x-guest-layout>

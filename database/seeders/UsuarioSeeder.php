@@ -23,7 +23,7 @@ class UsuarioSeeder extends Seeder
             'password' => $password,
             'telefono' => '70045678',
             'direccion' => 'Av. Siempre Viva 123',
-        ]);
+        ])->assignRole('super-admin');
 
         Usuario::create([
             'nombre' => 'Juan Perez',
@@ -31,7 +31,25 @@ class UsuarioSeeder extends Seeder
             'password' => $password,
             'telefono' => '60045678',
             'direccion' => 'Av. Siempre Viva 456',
-        ]);
+        ])->assignRole('cliente');
+
+        //Personal
+        Usuario::create([
+            'nombre' => 'Jim Halper',
+            'email' => 'jim@gmail.com',
+            'password' => $password,
+            'telefono' => '60045600',
+            'direccion' => 'Av. Siempre Viva 789',
+        ])->assignRole('personal');
+
+        //Proveedor
+        Usuario::create([
+            'nombre' => 'Joe Doe',
+            'email' => 'joe@gmail.com',
+            'password' => $password,
+            'telefono' => '71145678',
+            'direccion' => 'Av. Siempre Viva 005',
+        ])->assignRole('proveedor');
 
     }
 }

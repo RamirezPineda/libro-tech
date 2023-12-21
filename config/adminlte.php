@@ -187,15 +187,13 @@ return [
     | https://github.com/jeroennoten/Laravel-AdminLTE/wiki/Layout-and-Styling-Configuration
     |
     */
-
-    // AQUI PONER EL DARK MODE
     'classes_body' => '',
     'classes_brand' => '',
     'classes_brand_text' => '',
     'classes_content_wrapper' => '',
     'classes_content_header' => '',
-    'classes_content' => '', // poner dark mode
-    'classes_sidebar' => 'sidebar-dark-blue elevation-4',
+    'classes_content' => '', 
+    'classes_sidebar' => 'sidebar-dark-blue elevation-4', //sidebar-dark-blue elevation-4
     'classes_sidebar_nav' => '',
     'classes_topnav' => 'navbar-white navbar-light',
     'classes_topnav_nav' => 'navbar-expand',
@@ -303,17 +301,16 @@ return [
             'type'         => 'fullscreen-widget',
             'topnav_right' => true,
         ],
-
         // Sidebar items:
         [
             'type' => 'sidebar-menu-search',
             'text' => 'search',
         ],
-        [
-            'text' => 'blog',
-            'url'  => 'admin/blog',
-            'can'  => 'manage-blog',
-        ],
+        // [
+        //     'text' => 'blog',
+        //     'url'  => 'admin/blog',
+        //     'can'  => 'manage-blog',
+        // ],
         // [
         //     'text'        => 'pages',
         //     'url'         => 'admin/pages',
@@ -327,11 +324,11 @@ return [
             // 'icon_color' => 'blue',
             'url'        => 'dashboard',
         ],
-        [
-            'text' => 'Perfil',
-            'url'  => 'admin/settings',
-            'icon' => 'fas fa-fw fa-user',
-        ],
+        // [
+        //     'text' => 'Perfil',
+        //     'url'  => 'profile',
+        //     'icon' => 'fas fa-fw fa-user',
+        // ],
         // [
         //     'text' => 'change_password',
         //     'url'  => 'admin/settings',
@@ -340,56 +337,92 @@ return [
         [
             'text'    => 'Usuarios',
             'icon' => 'fas fa-fw fa-user',
+            'can' => 'proveedores.index',
             'submenu' => [
                 [
                     'text' => 'Clientes',
                     'url'  => 'clientes',
+                    'can'  => 'clientes.index',
                 ],
                 [
                     'text' => 'Personal',
                     'url'  => 'personales',
+                    'can'  => 'personales.index',
                 ],
                 [
                     'text' => 'Proveedores',
                     'url'  => 'proveedores',
+                    'can'  => 'proveedores.index',
                 ],
             ],
         ],
         [
-            'text'    => 'Productos',
+            'text' => 'Ventas',
+            'url'  => 'ventas',
+            // 'can' => 'ventas.index',
             // 'icon_color' => 'blue',
+        ],
+        [
+            'text'    => 'Productos',
+            'can' => 'productos.index',
+            'icon' => 'far fa-fw fa-file',
             'submenu' => [
                 [
                     'text' => 'Generos',
                     'url'  => 'generos',
+                    'can'  => 'generos.index',
                 ],
                 [
                     'text' => 'Promociones',
                     'url'  => 'promociones',
+                    'can'  => 'promociones.index',
                 ],
                 [
                     'text' => 'Productos',
                     'url'  => 'productos',
+                    'can'  => 'productos.index',
                 ],
             ],
         ],
         [
             'text'    => 'Inventario',
             // 'icon_color' => 'blue',
+            'can' => 'inventarios.index',
             'submenu' => [
                 [
                     'text' => 'Inventarios',
                     'url'  => 'inventarios',
+                    'can'  => 'inventarios.index',
                 ],
                 [
                     'text' => 'Notas de ingreso',
                     'url'  => 'nota-de-ingresos',
+                    'can'  => 'nota-de-ingresos.index',
                 ],
             ],
         ],
         [
             'text' => 'Servicios',
             'url'  => 'servicios',
+            'can' => 'servicios.index',
+            // 'icon_color' => 'blue',
+        ],
+        [
+            'text' => 'Mis Compras',
+            'url'  => 'compras',
+            'can' => 'compras.index',
+            // 'icon_color' => 'blue',
+        ],
+        ['header' => 'Otros'],
+        [
+            'text' => 'Roles',
+            'url'  => 'roles',
+            'can' => 'roles.index',
+            // 'icon_color' => 'blue',
+        ],
+        [
+            'text' => 'Configuración',
+            'url'  => 'configuraciones',
             // 'icon_color' => 'blue',
         ],
         // [

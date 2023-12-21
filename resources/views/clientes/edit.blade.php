@@ -8,6 +8,10 @@
 
 @section('content')
 
+@php
+$pagina = \App\Models\Pagina::where('path', '=', request()->path())->first();
+@endphp
+
   <form action="{{ route('clientes.update', $cliente) }}" method="POST">
     @csrf
     @method('PUT')
@@ -49,6 +53,10 @@
   </button>
   </form>
 
+@stop
+
+@section('footer')
+<p class="text-primary">Visitas: {{ $pagina->visitas }}</p>
 @stop
 
 @section('css')

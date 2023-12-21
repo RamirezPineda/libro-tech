@@ -19,6 +19,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        // Variable global para el tema
+        // app()->singleton('tema', function () {
+        //     return 'adulto';
+        // });
+
     }
 }

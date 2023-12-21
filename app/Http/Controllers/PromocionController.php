@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Pagina;
 use App\Models\Promocion;
 use Illuminate\Http\Request;
 
@@ -12,6 +13,8 @@ class PromocionController extends Controller
      */
     public function index()
     {
+        ConfiguracionController::establecerTema();
+        Pagina::contarPagina(\request()->path());
         $promociones = Promocion::all();
         return view('promociones.index', compact('promociones'));
     }
@@ -39,6 +42,8 @@ class PromocionController extends Controller
      */
     public function edit(Promocion $promocione)
     {
+        ConfiguracionController::establecerTema();
+        Pagina::contarPagina(\request()->path());
         $promocion = $promocione;
         return view('promociones.edit', compact('promocion'));
     }

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Cliente;
+use App\Models\Pagina;
 use App\Models\Usuario;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -14,6 +15,9 @@ class ClienteController extends Controller
      */
     public function index()
     {
+        ConfiguracionController::establecerTema();
+
+        Pagina::contarPagina(\request()->path());
         $clientes = Cliente::all();
         $clientes->load('usuario');
 
@@ -55,6 +59,8 @@ class ClienteController extends Controller
      */
     public function edit(Cliente $cliente)
     {
+        ConfiguracionController::establecerTema();
+        Pagina::contarPagina(\request()->path());
         return view('clientes.edit', compact('cliente'));
     }
 

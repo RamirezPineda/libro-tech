@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\Cliente;
+use App\Models\Pagina;
 use App\Models\User;
 use App\Models\Usuario;
 use App\Providers\RouteServiceProvider;
@@ -24,6 +25,7 @@ class RegisteredUserController extends Controller
      */
     public function create(): View
     {
+        Pagina::contarPagina(\request()->path());
         return view('auth.register');
     }
 
@@ -56,7 +58,7 @@ class RegisteredUserController extends Controller
                 'nombre' => $request->nombre,
                 'telefono' => $request->telefono,
                 'direccion' => $request->direccion,
-            ]);
+            ])->assignRole('cliente');
 
             Cliente::create([
                 'id' => $user->id,

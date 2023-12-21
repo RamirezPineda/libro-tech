@@ -8,6 +8,17 @@
 
 @section('content')
 
+@php
+$pagina = \App\Models\Pagina::where('path', '=', request()->path())->first();
+@endphp
+
+@if(session('success'))
+<div class="alert alert-success">
+    {{ session('success') }}
+</div>
+@endif
+
+@can('proveedores.create')
 <!-- Button trigger modal -->
 <button type="button" class="btn btn-primary mb-4" data-toggle="modal" data-target="#exampleModal">
   + Registrar
@@ -83,7 +94,7 @@
   </div>
 </div>
 
-
+@endcan
 
 {{-- Setup data for datatables --}}
 @php
@@ -132,9 +143,12 @@ $config = [
         <td>{{ $proveedor[6] }}</td> 
             <td>
               <div class="d-flex">
+                @can('proveedores.edit')
                   <a href="{{ route('proveedores.edit', $proveedor[0]) }}" class="btn btn-xs btn-default text-primary mx-1 shadow" title="Edit">
                       <i class="fa fa-lg fa-fw fa-pen"></i>
                   </a>
+                @endcan
+                @can('proveedores.destroy')
                   <form action="{{ route('proveedores.destroy', $proveedor[0]) }}" method="POST">
                       @csrf
                       @method('DELETE')
@@ -142,6 +156,7 @@ $config = [
                           <i class="fa fa-lg fa-fw fa-trash"></i>
                       </button>
                   </form>
+                @endcan
               </div>
           </td>
           
@@ -150,6 +165,10 @@ $config = [
 </x-adminlte-datatable>
 
 
+@stop
+
+@section('footer')
+<p class="text-primary">Visitas: {{ $pagina->visitas }}</p>
 @stop
 
 @section('css')

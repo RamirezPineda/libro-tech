@@ -8,6 +8,17 @@
 
 @section('content')
 
+@php
+$pagina = \App\Models\Pagina::where('path', '=', request()->path())->first();
+@endphp
+
+@if(session('success'))
+<div class="alert alert-success">
+    {{ session('success') }}
+</div>
+@endif
+
+@can('inventarios.create')
 <!-- Button trigger modal -->
 <button type="button" class="btn btn-primary mb-4" data-toggle="modal" data-target="#exampleModal">
   + Crear
@@ -64,7 +75,7 @@
   </div>
 </div>
 
-
+@endcan
 
 {{-- Setup data for datatables --}}
 @php
@@ -103,9 +114,12 @@ $config = [
             @endforeach
             <td>
               <div class="d-flex">
+                @can('inventarios.edit')
                   <a href="{{ route('inventarios.edit', $inventario[0]) }}" class="btn btn-xs btn-default text-primary mx-1 shadow" title="Edit">
                       <i class="fa fa-lg fa-fw fa-pen"></i>
                   </a>
+                @endcan
+                @can('inventarios.destroy')
                   <form action="{{ route('inventarios.destroy', $inventario[0]) }}" method="POST">
                       @csrf
                       @method('DELETE')
@@ -113,6 +127,7 @@ $config = [
                           <i class="fa fa-lg fa-fw fa-trash"></i>
                       </button>
                   </form>
+                @endcan
               </div>
           </td>
           
@@ -121,6 +136,10 @@ $config = [
 </x-adminlte-datatable>
 
 
+@stop
+
+@section('footer')
+<p class="text-primary">Visitas: {{ $pagina->visitas }}</p>
 @stop
 
 @section('css')

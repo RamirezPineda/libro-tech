@@ -8,6 +8,17 @@
 
 @section('content')
 
+@php
+$pagina = \App\Models\Pagina::where('path', '=', request()->path())->first();
+@endphp
+
+@if(session('success'))
+<div class="alert alert-success">
+    {{ session('success') }}
+</div>
+@endif
+
+@can('personles.create')
 <!-- Button trigger modal -->
 <button type="button" class="btn btn-primary mb-4" data-toggle="modal" data-target="#exampleModal">
   + Registrar
@@ -65,6 +76,19 @@
               <br><br>
               @enderror
 
+              <div class="form-group col-md-6">
+                <label for="exampleFormControlSelect1">Rol</label>
+                <select name="rol" class="form-control" id="exampleFormControlSelect1" required>
+                 @foreach ($roles as $rol)
+                     <option value="{{ $rol->id }}">{{ $rol->name }}</option>
+                 @endforeach
+                </select>
+              </div>
+              @error('rol')
+              <small class="text-danger">*{{ $message }}</small>
+              <br><br>
+              @enderror
+
             </div>
 
           </div>
@@ -77,7 +101,7 @@
   </div>
 </div>
 
-
+@endcan
 
 {{-- Setup data for datatables --}}
 @php
@@ -123,9 +147,12 @@ $config = [
         <td>{{ $personal[5] }}</td> 
             <td>
               <div class="d-flex">
+                @can('personales.edit')
                   <a href="{{ route('personales.edit', $personal[0]) }}" class="btn btn-xs btn-default text-primary mx-1 shadow" title="Edit">
                       <i class="fa fa-lg fa-fw fa-pen"></i>
                   </a>
+                @endcan
+                @can('personales.destroy')
                   <form action="{{ route('personales.destroy', $personal[0]) }}" method="POST">
                       @csrf
                       @method('DELETE')
@@ -133,6 +160,7 @@ $config = [
                           <i class="fa fa-lg fa-fw fa-trash"></i>
                       </button>
                   </form>
+                @endcan
               </div>
           </td>
           
@@ -141,6 +169,10 @@ $config = [
 </x-adminlte-datatable>
 
 
+@stop
+
+@section('footer')
+<p class="text-primary">Visitas: {{ $pagina->visitas }}</p>
 @stop
 
 @section('css')

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Pagina;
 use App\Models\Servicio;
 use Illuminate\Http\Request;
 
@@ -12,6 +13,8 @@ class ServicioController extends Controller
      */
     public function index()
     {
+        ConfiguracionController::establecerTema();
+        Pagina::contarPagina(\request()->path());
         $servicios = Servicio::all();
         return view('servicios.index', compact('servicios'));
     }
@@ -36,6 +39,8 @@ class ServicioController extends Controller
      */
     public function edit(Servicio $servicio)
     {
+        ConfiguracionController::establecerTema();
+        Pagina::contarPagina(\request()->path());
         return view('servicios.edit', compact('servicio'));
     }
 

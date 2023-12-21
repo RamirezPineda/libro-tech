@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Genero;
+use App\Models\Pagina;
 use Illuminate\Http\Request;
 
 use Illuminate\Support\Facades\Config;
@@ -14,10 +15,9 @@ class GeneroController extends Controller
      */
     public function index()
     {
+        ConfiguracionController::establecerTema();
+        Pagina::contarPagina(\request()->path());
         $generos = Genero::all();
-
-        // Configuración de la barra lateral
-        // Config::set('adminlte.classes_sidebar', 'sidebar-dark-danger elevation-4');
 
         return view('generos.index', compact('generos'));
     }
@@ -41,6 +41,8 @@ class GeneroController extends Controller
      */
     public function edit(Genero $genero)
     {
+        ConfiguracionController::establecerTema();
+        Pagina::contarPagina(\request()->path());
         return view('generos.edit', compact('genero'));
     }
 

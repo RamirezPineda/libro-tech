@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Genero;
+use App\Models\Pagina;
 use App\Models\Producto;
 use App\Models\Servicio;
 use Illuminate\Http\Request;
@@ -14,17 +15,40 @@ class TiendaController extends Controller
      */
     public function index()
     {
+        Pagina::contarPagina(\request()->path());
         $productos = Producto::all();
+        $productos->load('promocion');
         $generos = Genero::all();
         $generos->load('productos');
+
+        $modo = session('modo', 'light');
+        $modo = $modo == 'light' ?  '' : 'dark';
         
-        return view('tienda.inicio', compact('productos', 'generos'));
+        return view('tienda.inicio', compact('productos', 'generos', 'modo'));
     }
 
     public function carrito() 
     {
+        Pagina::contarPagina(\request()->path());
         $servicios = Servicio::all();
-        return view('tienda.carrito', compact('servicios'));
+
+        $modo = session('modo', 'light');
+        $modo = $modo == 'light' ?  '' : 'dark';
+
+        return view('tienda.carrito', compact('servicios', 'modo'));
+    }
+
+    public function setTheme(Request $request)
+    {
+        $modo = session('modo', 'light');
+
+        if ($modo == 'light') {
+            session(['modo' => 'dark']);
+        } else {
+            session(['modo' => 'light']);
+        }
+
+        return back();
     }
 
     /**

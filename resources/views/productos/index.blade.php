@@ -8,6 +8,14 @@
 
 @section('content')
 
+@if(session('success'))
+<div class="alert alert-success">
+    {{ session('success') }}
+</div>
+@endif
+
+@can('productos.create')
+
 <!-- Button trigger modal -->
 <button type="button" class="btn btn-primary mb-4" data-toggle="modal" data-target="#exampleModal">
   + Registrar
@@ -104,7 +112,7 @@
   </div>
 </div>
 
-
+@endcan
 
 {{-- Setup data for datatables --}}
 @php
@@ -156,9 +164,12 @@ $config = [
         <td>{{ $producto[6] }}</td> 
             <td>
               <div class="d-flex">
+                @can('productos.edit')
                   <a href="{{ route('productos.edit', $producto[0]) }}" class="btn btn-xs btn-default text-primary mx-1 shadow" title="Edit">
                       <i class="fa fa-lg fa-fw fa-pen"></i>
                   </a>
+                @endcan
+                @can('productos.destroy')
                   <form action="{{ route('productos.destroy', $producto[0]) }}" method="POST">
                       @csrf
                       @method('DELETE')
@@ -166,6 +177,7 @@ $config = [
                           <i class="fa fa-lg fa-fw fa-trash"></i>
                       </button>
                   </form>
+                @endcan
               </div>
           </td>
           

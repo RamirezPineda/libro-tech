@@ -7,7 +7,7 @@
         </span>
         
         {{-- BUSCADOR --}}
-        <input wire:model.live="search" type="search" class="w-full border rounded-md pl-10 pr-4 py-2 focus:border-blue-500 focus:outline-none focus:shadow-outline"  placeholder="Buscar">
+        <input wire:model.live="search" type="search" class="w-full border dark:bg-gray-900 dark:text-gray-200 rounded-md pl-10 pr-4 py-2 focus:border-blue-500 dark:focus:border-gray-500 focus:outline-none focus:shadow-outline"  placeholder="Buscar">
     </div>
 
     {{-- Resultados de la búsqueda --}}
@@ -26,10 +26,10 @@
                         </button>
                     </div>
                     <div class="px-5 py-3">
-                        <h3 class="text-gray-700"> {{ $producto->titulo }} </h3>
-                        <span class="text-gray-500 mt-2">Precio: {{$producto->precio }} Bs</span>
+                        <h3 class="text-gray-700 dark:text-gray-200"> {{ $producto->titulo }} </h3>
+                        <span class="text-gray-500 dark:text-gray-300 mt-2">Precio: {{$producto->precio }} Bs</span>
                         <br>
-                        <span class="text-gray-500 mt-2">Stock: {{$producto->stock }}</span>
+                        <span class="text-gray-500 dark:text-gray-300 mt-2">Stock: {{$producto->stock }}</span>
                     </div>
             
                 </div>

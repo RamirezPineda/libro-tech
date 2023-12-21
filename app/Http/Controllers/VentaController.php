@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Cliente;
 use App\Models\DetalleVenta;
+use App\Models\Pagina;
 use App\Models\Pago;
 use App\Models\Producto;
 use App\Models\Servicio;
@@ -21,7 +22,14 @@ class VentaController extends Controller
      */
     public function index()
     {
-        //
+        ConfiguracionController::establecerTema();
+        Pagina::contarPagina(\request()->path());
+        $ventas = Venta::all();
+        $ventas->load('cliente');
+        $ventas->load('pago');
+        $ventas->load('detalleVenta');
+        // $ventas->load('detalleVenta.producto');
+        return view('ventas.index', compact('ventas'));
     }
 
     /**
@@ -91,7 +99,8 @@ class VentaController extends Controller
 
             DB::commit();
 
-            return view('tienda.carrito', compact('laQrImage'));
+            // return view('tienda.carrito', compact('laQrImage'));
+            return back()->with('laQrImage', $laQrImage);
 
         } catch (\Throwable $th) {
             // Exception $e
@@ -170,20 +179,25 @@ class VentaController extends Controller
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Venta $venta)
-    {
-        //
-    }
 
     /**
      * Update the specified resource in storage.
      */
     public function update(Request $request, Venta $venta)
     {
-        //
+        $pago = Pago::where('id_venta', '=', $venta->id)->first();
+        $pago->estado = 'pagado';
+        $pago->save();
+
+        $detalles = DetalleVenta::where('id_venta', '=', $venta->id)->get();
+
+        foreach($detalles as $detalle) {
+            $producto = Producto::find($detalle->id_producto);
+            $producto->stock = $producto->stock - $detalle->cantidad;
+            $producto->save();
+        }
+
+        return redirect()->route('ventas.index')->with('success', 'Estado cambiado correctamente');
     }
 
     /**

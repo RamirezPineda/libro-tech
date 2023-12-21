@@ -8,6 +8,10 @@
 
 @section('content')
 
+@php
+$pagina = \App\Models\Pagina::where('path', '=', request()->path())->first();
+@endphp
+
   <form action="{{ route('personales.update', $personal) }}" method="POST">
     @csrf
     @method('PUT')
@@ -37,8 +41,21 @@
         <br><br>
         @enderror
         <x-adminlte-input  name="profesion" label="Profesión" placeholder="Contador"
-        fgroup-class="col-md-6" disable-feedback value="{{ old('profesion', $personal->profesion) }}"/>
+        fgroup-class="col-md-6" disable-feedback value="{{ old('profesion', $personal->profesion) }}" required/>
         @error('profesion')
+        <small class="text-danger">*{{ $message }}</small>
+        <br><br>
+        @enderror
+
+        <div class="form-group col-md-6">
+          <label for="exampleFormControlSelect1">Rol</label>
+          <select name="rol" class="form-control" id="exampleFormControlSelect1" required>
+           @foreach ($roles as $rol)
+               <option value="{{ $rol->id }}">{{ $rol->name }}</option>
+           @endforeach
+          </select>
+        </div>
+        @error('rol')
         <small class="text-danger">*{{ $message }}</small>
         <br><br>
         @enderror
@@ -48,6 +65,10 @@
     Guardar
   </button>
   </form>
+
+  @section('footer')
+  <p class="text-primary">Visitas: {{ $pagina->visitas }}</p>
+  @stop
 
 @stop
 

@@ -20,4 +20,9 @@ class Producto extends Model
         'id_genero',
         'id_promocion'
     ];
+
+    public function promocion()
+    {
+        return $this->belongsTo(Promocion::class, 'id_promocion');
+    }
 }

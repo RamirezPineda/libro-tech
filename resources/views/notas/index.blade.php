@@ -8,6 +8,18 @@
 
 @section('content')
 
+@php
+$pagina = \App\Models\Pagina::where('path', '=', request()->path())->first();
+@endphp
+
+@if(session('success'))
+<div class="alert alert-success">
+    {{ session('success') }}
+</div>
+@endif
+
+@can('nota-de-ingresos.create')
+
 <!-- Button trigger modal -->
 <button type="button" class="btn btn-primary mb-4" data-toggle="modal" data-target="#exampleModal">
   + Crear
@@ -83,7 +95,7 @@
     </div>
   </div>
 </div>
-
+@endcan
 
 
 {{-- Setup data for datatables --}}
@@ -148,6 +160,11 @@ $config = [
 
 
 @stop
+
+@section('footer')
+<p class="text-primary">Visitas: {{ $pagina->visitas }}</p>
+@stop
+
 
 @section('css')
     <link rel="stylesheet" href="/css/admin_custom.css">

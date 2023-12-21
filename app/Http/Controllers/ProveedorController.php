@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Pagina;
 use App\Models\Proveedor;
 use App\Models\Usuario;
 use Illuminate\Http\Request;
@@ -14,6 +15,8 @@ class ProveedorController extends Controller
      */
     public function index()
     {
+        ConfiguracionController::establecerTema();
+        Pagina::contarPagina(\request()->path());
         $proveedores = Proveedor::all();
         $proveedores->load('usuario');
 
@@ -42,7 +45,7 @@ class ProveedorController extends Controller
             'nombre' => $request->nombre,
             'telefono' => $request->telefono,
             'direccion' => $request->direccion,
-        ]);
+        ])->assignRole('proveedor');
 
         Proveedor::create([
             'id' => $user->id,
@@ -58,6 +61,8 @@ class ProveedorController extends Controller
      */
     public function edit(Proveedor $proveedore)
     {
+        ConfiguracionController::establecerTema();
+        Pagina::contarPagina(\request()->path());
         $proveedor = $proveedore;
 
         return view('proveedores.edit', compact('proveedor'));

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Inventario;
+use App\Models\Pagina;
 use App\Models\Producto;
 use Illuminate\Http\Request;
 
@@ -13,6 +14,8 @@ class InventarioController extends Controller
      */
     public function index()
     {
+        ConfiguracionController::establecerTema();
+        Pagina::contarPagina(\request()->path());
         $productos = Producto::all();
         $inventarios = Inventario::all();
         $inventarios->load('producto');
@@ -42,6 +45,8 @@ class InventarioController extends Controller
      */
     public function edit(Inventario $inventario)
     {
+        ConfiguracionController::establecerTema();
+        Pagina::contarPagina(\request()->path());
         $productos = Producto::all();
         return view('inventarios.edit', compact('inventario', 'productos'));
     }

@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Pagina;
 use App\Models\Personal;
+use App\Models\Rol;
 use App\Models\Usuario;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -14,10 +16,13 @@ class PersonalController extends Controller
      */
     public function index()
     {
+        ConfiguracionController::establecerTema();
+        Pagina::contarPagina(\request()->path());
         $personales = Personal::all();
         $personales->load('usuario');
+        $roles = Rol::where('id', '!=', '1')->get();
 
-        return view('personales.index', compact('personales'));
+        return view('personales.index', compact('personales', 'roles'));
     }
 
 
@@ -35,13 +40,14 @@ class PersonalController extends Controller
             'profesion' => ['required', 'string', 'max:100', 'min:3'],
         ]);
 
+        $rol = Rol::find($request->rol);
         $user = Usuario::create([
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'nombre' => $request->nombre,
             'telefono' => $request->telefono,
             'direccion' => $request->direccion,
-        ]);
+        ])->assignRole($rol->name);
 
         Personal::create([
             'id' => $user->id,
@@ -56,8 +62,12 @@ class PersonalController extends Controller
      */
     public function edit(Personal $personale)
     {
+        ConfiguracionController::establecerTema();
+        Pagina::contarPagina(\request()->path());
         $personal = $personale;
-        return view('personales.edit', compact('personal'));
+        $roles = Rol::where('id', '!=', '1')->get();
+
+        return view('personales.edit', compact('personal', 'roles'));
     }
 
     /**
@@ -78,6 +88,9 @@ class PersonalController extends Controller
         $user->email = $request->email;
         $user->telefono = $request->telefono;
         $user->direccion = $request->direccion;
+
+        $rol = Rol::find($request->rol);
+        $user->syncRoles($rol->name);
         $user->save();
 
         $personal = Personal::find($personale->id);

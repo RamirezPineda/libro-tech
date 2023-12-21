@@ -16,4 +16,10 @@ class DetalleVenta extends Model
         'id_venta',
         'id_producto'
     ];
+
+
+    public function producto()
+    {
+        return $this->belongsTo(Producto::class, 'id_producto');
+    }
 }

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Inventario;
 use App\Models\NotaIngreso;
+use App\Models\Pagina;
 use App\Models\Proveedor;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -15,6 +16,8 @@ class NotaIngresoController extends Controller
      */
     public function index()
     {
+        ConfiguracionController::establecerTema();
+        Pagina::contarPagina(\request()->path());
         $inventarios = Inventario::all();
         $proveedores = Proveedor::all();
         $notas = NotaIngreso::all();

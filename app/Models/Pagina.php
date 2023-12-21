@@ -16,7 +16,7 @@ class Pagina extends Model
     {
         $pagina = Pagina::where('path', $path)->first();
         if($pagina == null)
-        {
+        {   
             $pagina = new Pagina();
             $pagina->timestamps = false;
             $pagina->path = $path;

@@ -7,6 +7,12 @@
 @stop
 
 @section('content')
+
+@php
+$pagina = \App\Models\Pagina::where('path', '=', request()->path())->first();
+@endphp
+
+
     @if(session('error'))
     <div class="alert alert-danger">
         {{ session('error') }}
@@ -97,6 +103,10 @@
   </button>
   </form>
 
+@stop
+
+@section('footer')
+<p class="text-primary">Visitas: {{ $pagina->visitas }}</p>
 @stop
 
 @section('css')
